@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dolly Parton | SongTeller Network</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --gold: #f5e1a4; --dark-gold: #b8860b; --bg: #000; --red: #ff4d4d; --green: #00ff88; --heart: #ff69b4; }
+        body { background: var(--bg); color: #fff; font-family: 'Garamond', serif; margin: 0; padding: 0; overflow-x: hidden; }
+        
+        /* HEADER */
+        .site-header { border-bottom: 1px solid var(--gold); padding: 12px 15px; background: rgba(0,0,0,0.98); position: sticky; top: 0; z-index: 100; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; max-width: 500px; margin: auto; }
+        .site-logo { font-family: 'Times New Roman', serif; font-weight: 900; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; background: linear-gradient(to bottom, #fbe6a8 0%, #b8860b 50%, #fbe6a8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .msg-link { color: var(--gold); text-decoration: none; font-size: 0.6rem; border: 1px solid var(--gold); padding: 6px 10px; border-radius: 4px; text-transform: uppercase; font-weight: bold; background: rgba(245, 225, 164, 0.05); }
+
+        .container { padding: 15px; max-width: 500px; margin: auto; text-align: center; }
+
+        /* BIO SECTION */
+        .bio-box { padding: 25px 15px; border-bottom: 1px solid #222; margin-bottom: 20px; background: linear-gradient(to bottom, #000, #0a0a0a); }
+        .bio-box h1 { font-family: 'Times New Roman', serif; font-size: 2rem; margin: 0; color: var(--gold); letter-spacing: 1px; }
+        .bio-box p { font-size: 0.9rem; color: #ccc; font-style: italic; line-height: 1.6; margin-top: 15px; }
+        .bio-tags { display: flex; justify-content: center; gap: 10px; margin-top: 15px; font-size: 0.6rem; text-transform: uppercase; color: var(--gold); opacity: 0.8; }
+
+        /* MILESTONE */
+        .milestone-link { text-decoration: none; display: block; background: rgba(245, 225, 164, 0.08); border: 1px solid #333; padding: 14px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid var(--gold); color: #fff; transition: 0.3s; }
+        .milestone-link:hover { background: rgba(245, 225, 164, 0.15); }
+        .milestone-link h3 { font-size: 0.75rem; text-transform: uppercase; margin: 0 0 5px 0; color: #fff; letter-spacing: 1px; }
+        .milestone-link span { color: var(--gold); font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; }
+
+        /* FAN WALL */
+        .fan-wall { background: rgba(255, 105, 180, 0.05); border: 1px solid rgba(255, 105, 180, 0.2); border-radius: 15px; padding: 15px; margin: 15px 0; overflow: hidden; height: 120px; position: relative; }
+        .fan-wall-title { color: var(--heart); font-size: 0.75rem; text-transform: uppercase; font-weight: bold; margin-bottom: 12px; display: block; letter-spacing: 1px; }
+        .fan-messages { animation: scrollWall 20s linear infinite; display: flex; flex-direction: column; gap: 12px; }
+        @keyframes scrollWall { 0% { transform: translateY(0); } 100% { transform: translateY(-100%); } }
+        .fan-msg { font-size: 0.8rem; color: #eee; border-left: 2px solid var(--heart); padding-left: 12px; text-align: left; line-height: 1.3; }
+
+        /* ALBUMS SECTION (FIXED IMAGES) */
+        .album-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
+        .album-item { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid #222; }
+        .album-item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: #111; }
+        .album-label { font-size: 0.55rem; text-transform: uppercase; color: var(--gold); margin-top: 6px; display: block; font-weight: bold; }
+
+        /* PROMO & TIMER */
+        .promo-bar { border: 1px solid var(--gold); padding: 12px; border-radius: 12px; margin-bottom: 15px; background: #050505; }
+        #countdown { color: #fff; font-family: monospace; font-size: 2rem; font-weight: bold; margin-bottom: 10px; text-shadow: 0 0 10px var(--red); }
+        
+        .trust-ledger { background: #0a0a0a; border: 1px solid #222; border-radius: 15px; padding: 15px; margin: 15px 0; text-align: left; }
+        .live-dot { height: 7px; width: 7px; background: var(--red); border-radius: 50%; display: inline-block; margin-right: 6px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        .txn-row { display: grid; grid-template-columns: 1fr 1fr 1fr; font-family: monospace; font-size: 0.65rem; padding: 8px 0; border-bottom: 1px solid #1a1a1a; color: #aaa; }
+
+        /* ADDRESSES */
+        .address-card { background: #0d0d0d; border: 1px solid #222; border-radius: 12px; padding: 18px; margin-bottom: 12px; text-align: left; position: relative; cursor: pointer; }
+        .address-label { color: var(--gold); font-size: 0.65rem; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; display: block; }
+        .address-value { font-family: monospace; font-size: 0.8rem; color: #fff; word-break: break-all; width: 85%; display: block; }
+
+        /* VAULT */
+        .vault-section { padding: 40px 20px; background: #080808; border-top: 1px solid var(--gold); border-radius: 30px 30px 0 0; margin-top: 30px; }
+        .vault-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .vault-item { position: relative; border: 1px solid #222; height: 160px; border-radius: 15px; overflow: hidden; }
+        .vault-item img { width: 100%; height: 100%; object-fit: cover; filter: blur(40px); transition: 2.5s ease; }
+        .lock-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.85); font-size: 2rem; }
+        .unlocked img { filter: blur(0) !important; }
+        .unlocked .lock-overlay { display: none; }
+
+        .btn { display: inline-block; background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 20px; text-decoration: none; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 3px; margin: 15px 0; width: 100%; font-weight: bold; border-radius: 15px; cursor: pointer; }
+        .tg-badge { display: inline-flex; align-items: center; gap: 12px; background: linear-gradient(to bottom, #f5e1a4, #b8860b); color: #000; padding: 18px 35px; border-radius: 50px; text-decoration: none; font-weight: 900; font-size: 0.85rem; text-transform: uppercase; margin: 40px 0; }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-content">
+            <div class="site-logo">DOLLYPARTON</div>
+            <a href="https://t.me/dollypartonofficiaIly" target="_blank" class="msg-link">MESSAGE DOLLY</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="bio-box">
+            <h1>The SongTeller</h1>
+            <p>"I'm just a backwoods girl with a mountain of dreams. From the Great Smoky Mountains to the world stage, I've spent my life turning stories into songs and dreams into reality."</p>
+            <div class="bio-tags">
+                <span>Singer</span> • <span>Songwriter</span> • <span>Philanthropist</span>
+            </div>
+        </div>
+
+        <a href="https://dollyparton.com/imagination_library/dolly-partons-imagination-library-celebrates-a-season-of-300-million-dreams-this-autumn" target="_blank" class="milestone-link">
+            <h3>click MILESTONE to VIEW millions of my books</h3>
+            <span>✧ MILESTONE: 300 MILLION BOOKS GIFTED ✧</span>
+        </a>
+
+        <div class="fan-wall">
+            <span class="fan-wall-title">Fan Love ❤️ (Live Feed)</span>
+            <div class="fan-messages" id="fan-feed">
+                <div class="fan-msg">"Dolly, you are our Tennessee Angel! Love from Knoxville." - Sarah M.</div>
+                <div class="fan-msg">"Thank you for the books and the music. You changed my life!" - James R.</div>
+                <div class="fan-msg">"The SongTeller Vault is a dream come true. ❤️" - Elena W.</div>
+                <div class="fan-msg">"Rockstar is the best album of the decade! Love you!" - Mike T.</div>
+                <div class="fan-msg">"Can't wait for the Threads tour in 2026!" - Linda K.</div>
+            </div>
+        </div>
+
+        <div style="text-align:left; margin-top:30px;">
+            <span style="color:var(--gold); font-size:0.75rem; text-transform:uppercase; font-weight:bold; letter-spacing:2px;">Digital Discography</span>
+            <div class="album-grid">
+                <div class="album-item"><img src="https://i.ibb.co/3WfC00M/Rockstar.jpg" onerror="this.src='https://placehold.co/400x400/111/f5e1a4?text=Rockstar'"><span class="album-label">Rockstar</span></div>
+                <div class="album-item"><img src="https://i.ibb.co/8m0S38P/Coat.jpg" onerror="this.src='https://placehold.co/400x400/111/f5e1a4?text=Coat'"><span class="album-label">Coat Colors</span></div>
+                <div class="album-item"><img src="https://i.ibb.co/w0v5P2P/Jolene.jpg" onerror="this.src='https://placehold.co/400x400/111/f5e1a4?text=Jolene'"><span class="album-label">Jolene</span></div>
+                <div class="album-item"><img src="https://i.ibb.co/L50HjXN/Run-Rose.jpg" onerror="this.src='https://placehold.co/400x400/111/f5e1a4?text=Run+Rose'"><span class="album-label">Run Rose Run</span></div>
+                <div class="album-item"><img src="https://i.ibb.co/jR0nK1n/Blue-Smoke.jpg" onerror="this.src='https://placehold.co/400x400/111/f5e1a4?text=Blue+Smoke'"><span class="album-label">Blue Smoke</span></div>
+                <div class="album-item"><img src="https://i.ibb.co/8YhG0S9/Pure.jpg" onerror="this.src='https://placehold.co/400x400/111/f5e1a4?text=Pure'"><span class="album-label">Pure & Simple</span></div>
+            </div>
+        </div>
+
+        <div class="promo-bar">
+            <b style="color:var(--gold); font-size:0.75rem; letter-spacing:1px;">DOLLY'S 80TH BIRTHDAY VAULT</b>
+            <p style="font-size:0.6rem; color:#aaa; margin:5px 0;">Special Archive Access Window Closes In:</p>
+            <div id="countdown">23:59:59</div>
+        </div>
+
+        <div class="trust-ledger">
+            <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                <span style="font-size:0.7rem; color:var(--gold); font-weight:bold; letter-spacing:1px;">LIVE VERIFIED ACCESS</span>
+                <span style="font-size:0.6rem; color:#888;"><span class="live-dot"></span> 142 ONLINE</span>
+            </div>
+            <div id="txn-container">
+                <div class="txn-row"><span style="color:var(--gold);">0x4f...2a11</span><span>0.045 ETH</span><span style="color:var(--green); text-align:right;">VERIFIED</span></div>
+                <div class="txn-row"><span style="color:var(--gold);">bc1q...m9p5</span><span>0.002 BTC</span><span style="color:var(--green); text-align:right;">VERIFIED</span></div>
+            </div>
+        </div>
+
+        <div class="address-section">
+            <div class="address-card" onclick="copyText('bc1qhg4qyytmakwuce47mm6d53cnsewhakj37n8jzm', 'btc-hint')">
+                <span class="address-label">Bitcoin (BTC)</span>
+                <span class="address-value">bc1qhg4qyytmakwuce47mm6d53cnsewhakj37n8jzm</span>
+                <span style="position:absolute; right:18px; top:50%; transform:translateY(-50%);" id="btc-hint">📋</span>
+            </div>
+            <div class="address-card" onclick="copyText('0xc569280F4c2af891a070aD289ba901DE030e97fA', 'eth-hint')">
+                <span class="address-label">Ethereum (ETH)</span>
+                <span class="address-value">0xc569280F4c2af891a070aD289ba901DE030e97fA</span>
+                <span style="position:absolute; right:18px; top:50%; transform:translateY(-50%);" id="eth-hint">📋</span>
+            </div>
+        </div>
+
+        <button class="btn" onclick="startUnlock()">Initialize Access</button>
+
+        <section class="vault-section">
+            <h2 style="color:var(--gold); font-size:0.9rem; letter-spacing:5px; margin-bottom:20px;">✧ DIGITAL VAULT ✧</h2>
+            <div class="vault-grid">
+                <div class="vault-item" id="v1"><div class="lock-overlay">🔒</div><img src="https://i.ibb.co/3WfC00M/Rockstar.jpg"></div>
+                <div class="vault-item" id="v2"><div class="lock-overlay">🔒</div><img src="https://i.ibb.co/L50HjXN/Run-Rose.jpg"></div>
+            </div>
+            <p style="font-size:0.65rem; color:#555; margin-top:25px; letter-spacing:1px;">ENCRYPTED LEGACY CONTENT • VERIFICATION REQUIRED</p>
+        </section>
+
+        <a href="https://t.me/dollypartonofficiaIly" target="_blank" class="tg-badge">Join Telegram Channel</a>
+    </main>
+
+    <script>
+        function startTimer(duration, display) {
+            var timer = duration, hours, minutes, seconds;
+            setInterval(function () {
+                hours = Math.floor(timer / 3600); minutes = Math.floor((timer % 3600) / 60); seconds = Math.floor(timer % 60);
+                display.textContent = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+                if (--timer < 0) timer = 0;
+            }, 1000);
+        }
+        window.onload = function () { startTimer(24 * 60 * 60, document.querySelector('#countdown')); };
+
+        function copyText(text, hintId) {
+            navigator.clipboard.writeText(text);
+            document.getElementById(hintId).innerHTML = "✅";
+            setTimeout(() => { document.getElementById(hintId).innerHTML = "📋"; }, 2000);
+        }
+
+        function startUnlock() {
+            confetti({ particleCount: 250, spread: 90, origin: { y: 0.8 }, colors: ['#f5e1a4', '#ffffff', '#ff69b4'] });
+            document.querySelectorAll('.vault-item').forEach(i => i.classList.add('unlocked'));
+            alert("Verification initiated. Connection established to Dolly's Legacy Archive.");
+        }
+
+        const fans = ["Butterfly88", "Jolene_Fan", "SmokyMtnBoy", "9to5Worker", "CoatOfColors"];
+        const love = ["You are a treasure!", "Dolly forever! ❤️", "Sending love from Nashville.", "Thanks for the books!", "The best to ever do it."];
+        function updateFanWall() {
+            const feed = document.getElementById('fan-feed');
+            const msg = document.createElement('div');
+            msg.className = 'fan-msg';
+            msg.innerHTML = `"${love[Math.floor(Math.random()*love.length)]}" - ${fans[Math.floor(Math.random()*fans.length)]}`;
+            feed.prepend(msg);
+            if (feed.children.length > 8) feed.lastElementChild.remove();
+        }
+        setInterval(updateFanWall, 7000);
+    </script>
+</body>
+</html>
